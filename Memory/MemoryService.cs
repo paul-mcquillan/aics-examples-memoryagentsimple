@@ -150,10 +150,9 @@ namespace AICS.Examples.Memory
 
                         if (searchResponse.Value.SemanticSearch?.Answers != null)
                         {
-                            Console.WriteLine("Extractive Answers:");
                             foreach (var answer in searchResponse.Value.SemanticSearch.Answers)
                             {
-                                Console.WriteLine($"  {answer.Highlights}");
+                                Console.WriteLine($"Extractive Answer: {answer.Highlights}");
                             }
                         }
 

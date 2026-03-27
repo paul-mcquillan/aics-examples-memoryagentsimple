@@ -17,5 +17,4 @@ obj/
 .DS_Store
 Thumbs.db
 
-# Secrets
 appsettingsCLI.json

@@ -6,6 +6,7 @@ using static System.Net.WebRequestMethods;
 using AICS.Examples.Services;
 using AICS.Examples.Memory;
 using AICS.Examples;
+using Azure;
 
 internal class Program
 {   
@@ -32,13 +33,17 @@ internal class Program
             UserName = "Paul",
             MemoryService = memoryService
         };
+        agent.LogLevel = Microsoft.Extensions.Logging.LogLevel.Error;
 
         bool threadStarted = false;
         try
         {
-            await agent.StartThreadAsync();
-            threadStarted = true;
             Console.WriteLine("> Type 'exit', 'end', 'end thread' or 'all done' to quit.");
+
+            string hello = await agent.StartThreadAsync();
+            Speak("MemoryAgentSimple", hello);
+
+            threadStarted = true;
 
             while (true)
             {
@@ -55,13 +60,11 @@ internal class Program
                 try
                 {
                     var response = await agent.ReasonAsync(input);
-                    Console.WriteLine(response);
-                    Console.WriteLine();
+                    Speak("MemoryAgentSimple", response);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
-                    Console.WriteLine();
                 }
             }
         }
@@ -69,10 +72,17 @@ internal class Program
         {
             if (threadStarted)
             {
-                Console.WriteLine("The Conversation is at an end.");
+                Speak("MemoryAgentSimple", "Goodbye!");
                 await agent.EndThreadAsync();
             }
         }
         Console.WriteLine("Exit Event");
+    }
+
+    public static void Speak(string agentName, string response)
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine($"{agentName}: {response}");
+        Console.ResetColor();
     }
 }
